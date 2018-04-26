@@ -1,0 +1,7 @@
+#PBS -l walltime=1000:00:00
+
+source $HOME/OpenFOAM/OpenFOAM-2.4.0/etc/bashrc
+cd $PBS_O_WORKDIR
+date
+mpirun -np 4 idugksFoam -parallel
+date
