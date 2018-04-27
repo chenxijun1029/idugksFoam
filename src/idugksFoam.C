@@ -22,13 +22,11 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Application
-    bkgFoam
+    idugksFoam
 
 Description
-    OpenFOAM inplementation of the 
-    "A. Bardow, I.V. Karlin, A.A. Gusev, General characteristic-based algorithm for
-    off-lattice Boltzmann simulations, EPL (Europhysics Letters), 75 (2006) 434."
-    Author: Lianhua Zhu (zhulianhua121@gmail.com or lhzhu@hust.edu.cn)
+    An OpenFOAM inplementation of the incompressible fluid, simplified from 
+    dugksFoam(https://github.com/zhulianhua/dugksFoam)
 
 \*---------------------------------------------------------------------------*/
 
@@ -54,7 +52,6 @@ int main(int argc, char *argv[])
     label It = 0;
     while (runTime.run() && (Uchange > convergeTol))
     {
-        #include "CourantNo.H" // calculate the Co num
         #include "readTimeControlsExplicit.H"
         #include "setDeltaT.H"
 
