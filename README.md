@@ -1,4 +1,4 @@
-# fvLBM
-A finite volume lattice Boltzmann method solver implementated on OpenFOAM. 
+#idugksFoam
+An OpenFOAM inplementation of the incompressible fluid, simplified from dugksFoam(https://github.com/zhulianhua/dugksFoam)
 
-Ref: "A. Bardow, I.V. Karlin, A.A. Gusev, General characteristic-based algorithm for off-lattice Boltzmann simulations, EPL (Europhysics Letters), 75 (2006) 434."
+
