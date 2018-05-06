@@ -393,7 +393,7 @@ void Foam::discreteVelocity::updateGbarsurf()
         //- NOTE: outging DF can be treate unifiedly for all BCs, including processor BC
         if (type == "zeroGradient")
         {
-            gSurfPatch == gSurf_.boundaryField()[patchi];//.patchInternalField();
+            gSurfPatch == gSurf_.patchInternalField();
         }
         else if (type == "mixed")
         {
@@ -423,7 +423,7 @@ void Foam::discreteVelocity::updateGbarsurf()
                        &(CfPatch[facei] - C[faceCells[facei]] - 0.5*xii*dt));
                 }
                 //due to update
-                else // incomming, set to be equlibrium, give rho , extropolate U
+                else // incomming, set to be equlibrium, give rho , U
                 {
                     scalar CsSqr = dvm_.CsSqr().value();
                     scalar rho   = dnm_.rhoPatch[facei];
