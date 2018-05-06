@@ -64,10 +64,6 @@ int main(int argc, char *argv[])
 
         runTime.write();
 
-        Info<< "Step =" << It << "  ExecutionTime = " << runTime.elapsedCpuTime() << " s"
-            << "  ClockTime = " << runTime.elapsedClockTime() << " s"
-            << nl << endl;
-
         if(It%convergeCheckSteps == 0 && It >= convergeCheckSteps)
         {
             tmp<Foam::GeometricField<scalar, Foam::fvPatchField, Foam::volMesh> > 
@@ -75,13 +71,17 @@ int main(int argc, char *argv[])
             tmp<Foam::GeometricField<scalar, Foam::fvPatchField, Foam::volMesh> > 
                 deltaU = mag(U-Uold);
 
-                rhoChange         = gSum(deltaRho())/gSum(rho);
-                Uchange           = gSum(deltaU())/gSum(mag(U)());
+            rhoChange         = gSum(deltaRho())/gSum(rho);
+            Uchange           = gSum(deltaU())/gSum(mag(U)());
 
-                Info << "Density     changes = " << rhoChange         << endl;
-                Info << "Velocity    changes = " << Uchange << nl     << endl;
-                rhoOld = rho;
-                Uold = U;
+            Info<< "Step =" << It << "  ExecutionTime = " << runTime.elapsedCpuTime() << " s"
+            << "  ClockTime = " << runTime.elapsedClockTime() << " s"
+            << nl << endl;
+            Info << "Density     changes = " << rhoChange         << endl;
+            Info << "Velocity    changes = " << Uchange << nl     << endl;
+            
+            rhoOld = rho;
+            Uold = U;
         }
         
     }

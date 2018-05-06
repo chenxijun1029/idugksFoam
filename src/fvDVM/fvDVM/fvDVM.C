@@ -348,19 +348,14 @@ void Foam::fvDVM::updatePressureInOutBC()
                 label own = pOwner[facei];
                 vector Ui = Uvol_[own];
                 scalar rhoi = rhoVol_[own];
-                scalar ai = sqrt(CsSqr_.value() ); // sos
-                //scalar ai = sqrt(R_.value() * Ti * (KInner_ + 5)/(KInner_ + 3)); // sos
+                scalar ai = sqrt(CsSqr_.value() * 5 / 3); //KInner = 0;
+                //scalar ai = sqrt(R_.value() * Ti * (KInner_ + 5)/(KInner_ + 3)); 
                 
                 // change normal velocity component based on the characteristics
-                /*vector norm = SfPatch[facei]/magSfPatch[facei]; // boundary face normal vector
+                vector norm = SfPatch[facei]/magSfPatch[facei]; // boundary face normal vector
                 scalar Un = Ui & norm; // normal component
                 scalar UnIn = Un + (pressureIn - rhoi *CsSqr_.value())/rhoi/ai; // change normal component
                 Upatch[facei] = UnIn * norm + (Ui - Un * norm); // tangential component not changed.
-                */
-                //Info << "pressureIn ="          << pressureIn   <<endl;
-                //Info << "rho's boundaryField =" << rhoVol_[own] <<endl;
-                //Info << "U's boundaryField ="   << Uvol_[own]   <<endl;
-                //Info << "Upatch[facei] ="       << Upatch[facei]   <<endl;
             }
         }
         else if(rhoBCs[patchi].type() == "pressureOut")
@@ -379,21 +374,16 @@ void Foam::fvDVM::updatePressureInOutBC()
                 label own = pOwner[facei];
                 vector Ui = Uvol_[own];
                 scalar rhoi = rhoVol_[own];
-                scalar ai = sqrt(CsSqr_.value() *5/3); // sos
+                scalar ai = sqrt(CsSqr_.value() * 5 / 3); //KInner = 0;
                 //scalar ai = sqrt(R_.value() * Ti * (KInner_ + 5)/(KInner_ + 3)); // sos
 
                 // change outlet density
                 rhoPatch[facei] = rhoi  +  (pressureOut - rhoi * CsSqr_.value())/ai/ai; // Accturally not changed at all :
                 // change normal velocity component based on the characteristics
-                /*vector norm = SfPatch[facei]/magSfPatch[facei]; // boundary face normal vector
+                vector norm = SfPatch[facei]/magSfPatch[facei]; // boundary face normal vector
                 scalar Un = Ui & norm; // normal component
                 scalar UnIn = Un + ( rhoi * CsSqr_.value() - pressureOut)/rhoi/ai; // change normal component
                 Upatch[facei] = UnIn * norm + (Ui - Un * norm); // tangential component not changed.
-                */
-                //Info << "pressureOut ="         << pressureOut   <<endl;
-                //Info << "rho's boundaryField =" << rhoVol_[own] <<endl;
-                //Info << "U's boundaryField ="   << Uvol_[own]   <<endl;
-                //Info << "Upatch[facei] ="       << Upatch[facei]   <<endl;
             }
         }
     }
@@ -482,33 +472,21 @@ Foam::fvDVM::~fvDVM()
 
 void Foam::fvDVM::evolution()
 {
-    //DEBUG
-    //const labelUList& faceCells = mesh_.boundary()[1].faceCells();
-    //const fvsPatchField<vector>& CfPatch = mesh_.Cf().boundaryField()[1];
     updateGbarvol();
 
     updateGbarGrad();
-    //Info << "updateGbarvol is done;" <<endl;
+
     updateGbarsurf();
-    //Info << "updateGbarsurf is done;" <<endl;
-    //Check gSurf at farField
-    /*forAll(DV_, dvi)
-    {
-        Info << "Dv[" << dvi <<"] " << DV_[dvi].xi() << endl;            
-    }
-  
-    Info << "Probe point x, y, z" << CfPatch[faceCells[10]] << endl;
-    */
+
     updateMacroSurf();
-    //Info << "updateMacroSurf is done;" <<endl;
+
     updateGsurf();
-    //Info << "updateGsurf is done;" <<endl;
+
     updateGnewVol();
-    //Info << "updateGnewVol is done;" <<endl;
+
     updateMacroVol();
-    //Info << "updateMacroVol is done;" <<endl;
+
     updatePressureInOutBC();
-    //Info << "updatePressureInOutBC is done;" <<endl;
 }
 
 // ************************************************************************* //

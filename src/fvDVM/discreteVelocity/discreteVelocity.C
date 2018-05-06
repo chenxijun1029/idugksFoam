@@ -25,7 +25,6 @@ License
 
 #include "fvDVM.H"
 #include "discreteVelocity.H"
-#include "constants.H"
 #include "fixedGradientFvPatchField.H"
 
 #include "farFieldFvPatchField.H"
@@ -78,7 +77,7 @@ Foam::discreteVelocity::discreteVelocity
             "0", dimMass/pow3(dimLength), 0.0
         )
     ),
- //BKG to DUGKS : add a field of supporting distribution function
+    //BKG to DUGKS : add a field of supporting distribution function
     gBarVol_ 
     (
     	IOobject
@@ -156,7 +155,7 @@ void Foam::discreteVelocity::initDFtoEq()
 void Foam::discreteVelocity::setBCtype()
 {
     // Only from rho's B.C can we determine surfaceScalarField f's B.C.
-    // for all patchi fo h/g barP, set to zeroGradient
+    // for all patchi of gbarP, set to zeroGradient
     // May improve for inlet ingoing DF
 
      const GeometricField<scalar, fvPatchField, volMesh>::GeometricBoundaryField& 
@@ -164,7 +163,7 @@ void Foam::discreteVelocity::setBCtype()
 
     forAll(rhoBCs, patchi)
     {
-        if (rhoBCs[patchi].type() == "fixedValue") //inlet
+        if (rhoBCs[patchi].type() == "fixedValue") 
         {
             gSurf_.boundaryField().set
             (
@@ -175,7 +174,7 @@ void Foam::discreteVelocity::setBCtype()
                 )
             );
         }
-        else if (rhoBCs[patchi].type() == "farField") //inlet
+        else if (rhoBCs[patchi].type() == "farField") 
         {
             gSurf_.boundaryField().set
             (
@@ -186,7 +185,7 @@ void Foam::discreteVelocity::setBCtype()
                 )
             );
         }
-        else if (rhoBCs[patchi].type() == "zeroGradient") //maxwellWall
+        else if (rhoBCs[patchi].type() == "zeroGradient") 
         {
             gSurf_.boundaryField().set
             (
@@ -197,7 +196,7 @@ void Foam::discreteVelocity::setBCtype()
                 )
             );
         }
-        else if (rhoBCs[patchi].type() == "bounceBack") //maxwellWall
+        else if (rhoBCs[patchi].type() == "bounceBack") 
         {
             gSurf_.boundaryField().set
             (
@@ -269,8 +268,7 @@ void Foam::discreteVelocity::updateGbarvol()
         dimensionedScalar("0", gVol_.dimensions(), 0)
     );
 
-
-    //- get gEq and hEq
+    //- get gEq
     equilibrium
     (
         gEq,
@@ -278,36 +276,32 @@ void Foam::discreteVelocity::updateGbarvol()
         dvm_.Uvol() 
     );
     gBarVol_ = (1.0 - dvm_.omega1())*gVol_ + dvm_.omega1()*gEq;
-    gBarVol_.correctBoundaryConditions(); // NOTE: check if the newly defined zeroGradientFvsPatchField 
+    gBarVol_.correctBoundaryConditions(); 
 }
 
 void Foam::discreteVelocity::updateGbarGrad()
 {
-    gBarGrad_ = fvc::grad(gBarVol_); 
-    gBarGrad_.correctBoundaryConditions();
-}
-
-void Foam::discreteVelocity::updateGbarsurf()
-{
-  // Pre-setup
+      // Pre-setup
     // 1. correct the boundary value of gBarPvol_
     //    the gradient at boundary is known
     // 2. get the gradient
     //
-    //gBarGrad_ = fvc::grad(gBarVol_); 
+    gBarGrad_ = fvc::grad(gBarVol_); 
     // The DVMsymmetry is  rocessed automatically in fvc::grad operator
 
     //
     // 3. correct the boundary value of the grad field
     //    to be used at next time
-    //gBarGrad_.correctBoundaryConditions();
+    gBarGrad_.correctBoundaryConditions();
 
     // 4. patch the normal component of boundary value of the grad 
     //    to the gradient field of the fixed 
-    //    gradient feild of the gBarPvol_ and 
-    //    hBarPvol_ ...
+    //    gradient feild of the gBarPvol_ 
     //    NOTE: we need the surfaceNormal Gradient
+}
 
+void Foam::discreteVelocity::updateGbarsurf()
+{
     forAll(gBarGrad_.boundaryField(), patchi)
     {
         const vectorField n
@@ -322,7 +316,7 @@ void Foam::discreteVelocity::updateGbarsurf()
             && gBarVol_.boundaryField()[patchi].type() != "processorCyclic"
             && gBarVol_.boundaryField()[patchi].type() != "cyclic"
             && gBarVol_.boundaryField()[patchi].type() != "symmetryPlane"
-           ) // only for fixed gradient g/hBarPvol
+           ) // only for fixed gradient gBarPvol
         {
             // normal component of the grad field
             fixedGradientFvPatchField<scalar>& gBarVolPatch = 
@@ -366,7 +360,6 @@ void Foam::discreteVelocity::updateGbarsurf()
             iGsurf[facei] = iGbarVol[own] 
               + (iGbarGrad[own]&(Cf[facei] - C[own] - 0.5*xii*dt));
         }
-        // Debug, no = 0, =0 put to > 0
         else if ((xii&Sf[facei]) < -VSMALL) // comming form nei
         {
             iGsurf[facei] = iGbarVol[nei]
@@ -384,7 +377,7 @@ void Foam::discreteVelocity::updateGbarsurf()
         }
     }
 
-  // boundary faces
+    // boundary faces
     forAll(gSurf_.boundaryField(), patchi)
     {
         word type = gSurf_.boundaryField()[patchi].type();
@@ -397,7 +390,7 @@ void Foam::discreteVelocity::updateGbarsurf()
             mesh_.Cf().boundaryField()[patchi];
         const labelUList& faceCells = mesh_.boundary()[patchi].faceCells();
         
-        //- NOTE: outging DF can be treate unifily for all BCs, including processor BC
+        //- NOTE: outging DF can be treate unifiedly for all BCs, including processor BC
         if (type == "zeroGradient")
         {
             gSurfPatch == gSurf_.boundaryField()[patchi];//.patchInternalField();
@@ -413,8 +406,8 @@ void Foam::discreteVelocity::updateGbarsurf()
                     gSurfPatch[facei] = iGbarVol[faceCells[facei]]  
                       + ((iGbarGrad[faceCells[facei]])
                        &(CfPatch[facei] - C[faceCells[facei]] - 0.5*xii*dt));
-                //incoming and parallel to face, not changed.
                 }
+                //incoming and parallel to face, not changed.    
             }
         }
         else if (type == "farField")
@@ -433,9 +426,10 @@ void Foam::discreteVelocity::updateGbarsurf()
                 else // incomming, set to be equlibrium, give rho , extropolate U
                 {
                     scalar CsSqr = dvm_.CsSqr().value();
-                    vector U     = dvm_.Uvol()[faceCells[facei]];
+                    scalar rho   = dnm_.rhoPatch[facei];
+                    vector U     = dvm_.Upatch[facei];
 
-                    gSurfPatch[facei] =  weight_*rhoPatch[facei]*(1.0 + (xii&U)/CsSqr 
+                    gSurfPatch[facei] =  weight_*rho*(1.0 + (xii&U)/CsSqr 
                                       + 0.5*((xii&U)*(xii&U))/CsSqr/CsSqr 
                                       - 0.5*magSqr(U)/CsSqr);
                 }
@@ -602,10 +596,9 @@ void Foam::discreteVelocity::equilibrium
     const volVectorField&  U
 )
 {
-    dimensionedVector xii = xi_;//.value();
-    dimensionedScalar CsSqr = dvm_.CsSqr();//.value();
+    dimensionedVector xii = xi_;
+    dimensionedScalar CsSqr = dvm_.CsSqr();
     geq =  weight_*rho*(1.0 + (xii&U)/CsSqr + 0.5*((xii&U)*(xii&U))/CsSqr/CsSqr - 0.50*magSqr(U)/CsSqr);
-    //geq =  weight_*rho*(1.0 + (xii&U)/CsSqr);// + 0.5*((xii&U)*(xii&U))/CsSqr/CsSqr);// - 0.50*magSqr(U)/CsSqr);
 }
 
 void Foam::discreteVelocity::equilibrium
@@ -615,10 +608,9 @@ void Foam::discreteVelocity::equilibrium
     const surfaceVectorField&  U
 )
 {
-    dimensionedVector xii = xi_;//.value();
-    dimensionedScalar CsSqr = dvm_.CsSqr();//.value();
+    dimensionedVector xii = xi_;
+    dimensionedScalar CsSqr = dvm_.CsSqr();
     geq =  weight_*rho*(1.0 + (xii&U)/CsSqr + 0.5*((xii&U)*(xii&U))/CsSqr/CsSqr - 0.50*magSqr(U)/CsSqr);
-    //geq =  weight_*rho*(1.0 + (xii&U)/CsSqr);// + 0.5*((xii&U)*(xii&U))/CsSqr/CsSqr);// - 0.50*magSqr(U)/CsSqr);
 }
 
 void Foam::discreteVelocity::equilibrium

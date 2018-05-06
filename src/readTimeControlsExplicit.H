@@ -23,7 +23,6 @@ License
 
 Global
     readTimeControls
-
 Author
     lhzhu
 Description
@@ -46,10 +45,10 @@ scalar maxDeltaT =
     runTime.controlDict().lookupOrDefault<scalar>("maxDeltaT", GREAT);
 
 scalar convergeTol =
-    runTime.controlDict().lookupOrDefault<scalar>("convergeTol", 1.0e-12);
+    runTime.controlDict().lookupOrDefault<scalar>("convergeTol", 1.0e-6);
 
 label convergeCheckSteps =
-    runTime.controlDict().lookupOrDefault("convergeCheckSteps", 1);
+    runTime.controlDict().lookupOrDefault("convergeCheckSteps", 100);
     
 scalar rhoChange = 1.0;
 scalar Uchange = 1.0;
