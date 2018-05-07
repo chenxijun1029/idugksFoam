@@ -427,7 +427,7 @@ void Foam::discreteVelocity::updateGbarsurf()
                 {
                     scalar CsSqr = dvm_.CsSqr().value();
                     scalar rho   = rhoPatch[facei];
-                    vector U     = dvm.Uvol()[pOwner[facei]];
+                    vector U     = dvm.Uvol()[faceCells[facei]];
 
                     gSurfPatch[facei] =  weight_*rho*(1.0 + (xii&U)/CsSqr 
                                       + 0.5*((xii&U)*(xii&U))/CsSqr/CsSqr 
