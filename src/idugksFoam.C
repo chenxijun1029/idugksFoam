@@ -52,7 +52,8 @@ int main(int argc, char *argv[])
     label It = 0;
     while (runTime.run() && (Uchange > convergeTol))
     {
-        #include "readTimeControlsExplicit.H"
+        #include "CourantNo.H"
+		#include "readTimeControlsExplicit.H"
         #include "setDeltaT.H"
 
         runTime++;
