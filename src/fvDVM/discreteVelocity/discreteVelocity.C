@@ -393,7 +393,7 @@ void Foam::discreteVelocity::updateGbarsurf()
         //- NOTE: outging DF can be treate unifiedly for all BCs, including processor BC
         if (type == "zeroGradient")
         {
-            gSurfPatch == gSurf_.boundaryField()[patchi].patchInternalField();
+            gSurfPatch == gBarVol_.boundaryField()[patchi].patchInternalField();
         }
         else if (type == "mixed")
         {
