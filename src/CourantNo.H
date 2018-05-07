@@ -37,7 +37,7 @@ scalar meanCoNum = 0.0;
 CoNum = 0.8;
 meanCoNum = 0.8;
 
-Info<< "Mean and max Courant Numbers = "
-    << meanCoNum << " " << CoNum << endl;
+/*Info<< "Mean and max Courant Numbers = "
+    << meanCoNum << " " << CoNum << endl;*/
 
 // ************************************************************************* //
