@@ -1,0 +1,14 @@
+LOCAL_OBJECTS = \
+farFieldFvPatchFields.o\
+farFieldFvsPatchFields.o\
+bounceBackFvPatchFields.o\
+bounceBackFvsPatchFields.o\
+zeroGradientFvsPatchFields.o\
+pressureInFvPatchFields.o\
+pressureOutFvPatchFields.o\
+discreteVelocity.o\
+zeroBoundaryVectors.o\
+zeroBoundaryGrads.o\
+VenkatakrishnanSlopeMulti.o\
+VenkatakrishnanLimitedGrads.o\
+fvDVM.o
