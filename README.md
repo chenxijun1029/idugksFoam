@@ -1,6 +1,6 @@
 # idugksFoam
 
-An OpenFOAM inplementation for  incompressible isothermal fluid. While modified from [dugksFoam][1] \[1\], idugksFoam is much more efficient  when applied for incompressible flow such as porous media flow.
+An OpenFOAM inplementation for  incompressible isothermal fluid. while based on [dugksFoam][1] \[1\], idugksFoam is much more efficient  when applied for incompressible flow such as porous media flow.
 
 ## key feature
 
