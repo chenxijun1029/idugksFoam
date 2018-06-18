@@ -4,7 +4,7 @@ An OpenFOAM inplementation for  incompressible isothermal fluid. While modified 
 
 ## key feature
 
-- A standard OpenFOAM solver using discrete unified gas kinetic scheme \[2\].
+- A standard OpenFOAM solver for Boltzmann model equation using discrete unified gas kinetic scheme \[2\].
 
 - Based on BGK collision model, which is suitable for incompressible isothermal fluid
 
