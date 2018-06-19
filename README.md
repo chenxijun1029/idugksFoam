@@ -2,17 +2,33 @@
 
 An OpenFOAM inplementation for  incompressible isothermal fluid. While based on [dugksFoam][1] \[1\], idugksFoam is much more efficient when applied for incompressible flow such as porous media flow.
 
-## key feature
+## Key features
 
-- A standard OpenFOAM solver for Boltzmann model equation using discrete unified gas kinetic scheme \[2\].
+- A standard OpenFOAM solver for Boltzmann model equation using discrete unified gas kinetic scheme \[2\]
+
+- Maintain major feautres of dugksFoam including 1D & 2D & 3D in a single solver, various boundary condition types and arbitrary unstructured meshes \[3\]
 
 - Based on BGK collision model, which is suitable for incompressible isothermal fluid
 
 - Bounce-back scheme is used for velocity boundary condition, which is much more effiecient when applied for porous media flow
 
-- Arbitrary unstructured meshes \[3\].
-
 - Easyly applied to REV scale for engineer computing
+
+## Installation
+
+OpenFOAM-2.4.0 is supported only at present, with Intel/gcc compilers.
+
+    of240 # load the environment of OpenFOAM-2.4.0
+    cd idugksFoam/src
+    ./Allwmake
+
+Done!
+
+## Usage
+
+There is a typical example in demo/testPressureBoundary for simulation of poiseuille flow, from which you could know how to set boundary conditon and parameters. A full documentation will be written if necessary. As for other module such as meshes, control and postprocession, just find answer in [OpenFOAM User Guide][5]. 
+
+If there is any question, leave it here.
 
 ## Reference
 
@@ -29,3 +45,5 @@ An OpenFOAM inplementation for  incompressible isothermal fluid. While based on 
 [3]: https://journals.aps.org/pre/abstract/10.1103/PhysRevE.88.033305 "DUGKS for isothermal fluid"
 
 [4]: https://www.sciencedirect.com/science/article/pii/S0045793016000177 "DUGKS on unstructed mesh"
+
+[5]: https://www.openfoam.com/documentation/user-guide/ "OpenFOAM User Guide"
